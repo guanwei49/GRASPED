@@ -132,8 +132,8 @@ class Decoder(nn.Module):
         # s = [batch_size, dec_hid_dim]
         # enc_output = [seq_len, batch_size, enc_hid_dim * 2]
 
-        dec_input = dec_input.unsqueeze(1) # dec_input = [batch_size, 1,enc_hid_dim]
-        dec_input =self.embedding(dec_input)
+        dec_input = dec_input.unsqueeze(1) # dec_input = [batch_size, 1]
+        dec_input =self.embedding(dec_input) # dec_input = [batch_size, 1] => [batch_size, 1,enc_hid_dim]
 
         dropout_dec_input = self.dropout(dec_input).transpose(0, 1) #  [batch_size, 1,enc_hid_dim]=>[1,batch,enc_hid_dim]
 
