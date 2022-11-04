@@ -87,14 +87,6 @@ class Attention(nn.Module):
 #         self.query = nn.Linear(dec_hid_dim, self.hidden)
 #         self.key = nn.Linear(enc_hid_dim * 2, self.hidden)
 #
-#         self.attn_dropout = nn.Dropout(0.2)
-#
-#         # 做完self-attention 做一个前馈全连接 LayerNorm 输出
-#         self.dense = nn.Linear( self.hidden,  self.hidden)
-#         self.LayerNorm = LayerNorm( self.hidden, eps=1e-12)
-#
-#         # self.attn = nn.Linear((enc_hid_dim * 2) + dec_hid_dim, dec_hid_dim, bias=False)  # 输出的维度是任意的
-#         # self.v = nn.Linear(dec_hid_dim, 1, bias=False)  # 将输出维度置为1
 #
 #     def forward(self, s, enc_output):
 #         # s = [batch_size, dec_hidden_dim]

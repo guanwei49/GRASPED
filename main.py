@@ -16,16 +16,18 @@ import torch.utils.data as Data
 
 def main(dataset,batch_size=64,n_epochs=20 ,lr=0.0002 ,b1=0.5 ,b2=0.999 ,seed=None ,enc_hidden_dim = 64 , encoder_num_layers = 4,decoder_num_layers=2, dec_hidden_dim = 64):
     '''
-    :param dataset_name:
+    :param dataset: instance of Dataset
     :param batch_size: size of mini batch
     :param n_epochs:  number of epochs of training
     :param lr: adam: learning rate
     :param b1: adam: decay of first order momentum of gradient
     :param b2: adam: decay of first order momentum of gradient
-    :param latent_dim: dimensionality of the latent space
-    :param n_critic: number of training steps for discriminator per iter
     :param seed: value of Pytorch random seed
-    :return:
+    :param enc_hidden_dim:  hidden dimension of GRU in encoder
+    :param encoder_num_layers:  layers of GRU in encoder
+    :param decoder_num_layers:  layers of GRU in decoder
+    :param dec_hidden_dim: hidden dimension of GRU in decoder
+    :return:  trace_level_abnormal_scores, event_level_abnormal_scores, attr_level_abnormal_scores
     '''
 
 

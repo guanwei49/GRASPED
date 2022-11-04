@@ -6,22 +6,7 @@ from tqdm import tqdm
 from model import device
 from model.GRU_AE import  GRU_AE
 
-def train(dataloader,attribute_dims,n_epochs=30 ,lr=0.0002 ,b1=0.5 ,b2=0.999 ,seed=None,enc_hidden_dim = 50 , encoder_num_layers = 8,decoder_num_layers=4, dec_hidden_dim = 50):
-    '''
-    GRU_AE
-    :param dataloader:
-    :param attribute_dims:  Number of attribute values per attribute : list
-    :param n_epochs:  number of epochs of training
-    :param lr: adam: learning rate
-    :param b1: adam: decay of first order momentum of gradient
-    :param b2: adam: decay of first order momentum of gradient
-    :param seed: value of Pytorch random seed
-    :param enc_hidden_dim: encoder hidden dimensions :GRU
-    :param encoder_num_layers: Number of encoder layers :GRU
-    :param dec_hidden_dim:  decoder hidden dimensions :GRU
-    :param teacher_forcing_ratio:
-    :return: gru_ae
-    '''
+def train(dataloader,attribute_dims,n_epochs ,lr ,b1 ,b2 ,seed,enc_hidden_dim , encoder_num_layers ,decoder_num_layers, dec_hidden_dim):
 
     if type(seed) is int:
         torch.manual_seed(seed)
