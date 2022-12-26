@@ -122,18 +122,18 @@ class Decoder(nn.Module):
     def forward(self, dec_input, s, enc_output):
         # dec_input = [batch_size]
         # s = [batch_size, dec_hid_dim]
-        # enc_output = [seq_len, batch_size, enc_hid_dim * 2]
+        # enc_output = [seq_len*num_attrs, batch_size, enc_hid_dim * 2]
 
         dec_input = dec_input.unsqueeze(1) # dec_input = [batch_size, 1]
         dec_input =self.embedding(dec_input) # dec_input = [batch_size, 1] => [batch_size, 1,enc_hid_dim]
 
-        dropout_dec_input = self.dropout(dec_input).transpose(0, 1) #  [batch_size, 1,enc_hid_dim]=>[1,batch,enc_hid_dim]
+        dropout_dec_input = self.dropout(dec_input).transpose(0, 1) #  [batch_size, 1,enc_hid_dim]=>[1,batch_size,enc_hid_dim]
 
-        # c = [1, batch_size, enc_hid_dim * 2]
+        # c = [1, batch_size, enc_hid_dim * 2] ；attention_probs = [batch_size , 1, seq_len*num_attrs]
         c,attention_probs = self.attention(s, enc_output)
 
         rnn_input = torch.cat((dropout_dec_input, c), dim = 2) # rnn_input = [1, batch_size, (enc_hid_dim * 2)+ enc_hid_dim]
-
+        # dec_output=[1,batch_size,dec_hid_dim]  ; dec_hidden=[num_layers,batch_size,dec_hid_dim]
         dec_output, dec_hidden = self.rnn(rnn_input, s.repeat( self.num_layers,1,1))
 
         dec_output = dec_output.squeeze(0) # dec_output:[ batch_size, dec_hid_dim]
