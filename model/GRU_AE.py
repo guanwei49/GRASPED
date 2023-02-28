@@ -167,8 +167,8 @@ class GRU_AE(nn.Module):
         :return:
         '''
         trg_len = None
-        outputs = []
-        s = []
+        outputs = [] #概率分布 probability map
+        s = [] #解码层GRU初始隐藏表示
         enc_output = None
         for i, dim in enumerate(self.attribute_dims):
             X = Xs[i].transpose(0, 1)
