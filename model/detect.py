@@ -7,10 +7,11 @@ from model import device
 
 def detect(gru_ae, dataloader, attribute_dims, attr_Shape):
     gru_ae.eval()
+    pos = 0
     with torch.no_grad():
         attr_level_abnormal_scores=np.zeros(attr_Shape)
         print("*" * 10 + "detecting" + "*" * 10)
-        for index, Xs in enumerate(tqdm(dataloader)):
+        for Xs in tqdm(dataloader):
             case_len = Xs[-1]
             Xs = Xs[:-1]
             for k,tempX in enumerate(Xs):
@@ -29,7 +30,8 @@ def detect(gru_ae, dataloader, attribute_dims, attr_Shape):
                     for attr_index in range(len(attribute_dims)):
                         # 取比实际出现的属性值大的其他属性值的概率之和
                         truepos=Xs[attr_index][batch_i,time_step]
-                        attr_level_abnormal_scores[index*len(case_len)+batch_i,time_step,attr_index]=fake_X[attr_index][batch_i,time_step][fake_X[attr_index][batch_i,time_step]>fake_X[attr_index][batch_i,time_step,truepos]].sum()
+                        attr_level_abnormal_scores[pos+batch_i,time_step,attr_index]=fake_X[attr_index][batch_i,time_step][fake_X[attr_index][batch_i,time_step]>fake_X[attr_index][batch_i,time_step,truepos]].sum()
+            pos += Xs[attr_index].shape[0]
         trace_level_abnormal_scores = attr_level_abnormal_scores.max((1, 2))
         event_level_abnormal_scores = attr_level_abnormal_scores.max((2))
         return  trace_level_abnormal_scores,event_level_abnormal_scores,attr_level_abnormal_scores

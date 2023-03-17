@@ -187,8 +187,8 @@ class GRU_AE(nn.Module):
             # enc_output = [trg_len*len(self.attribute_dims), batch_size, enc_hid_dim * 2]
             s.append(s_)
 
-            for j, pos in enumerate(X[0, :]):
-                outputs[-1][0, j, pos] = 1
+            outputs[i][0, :, X[0, 0]] = 1
+
         for i, dim in enumerate(self.attribute_dims):
             X = Xs[i].transpose(0, 1)
             s0 = s[i]
