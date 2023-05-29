@@ -72,3 +72,10 @@ class Dataset(object):
     def num_attributes(self):
         """Return the number of attributes in the event log."""
         return len(self.features)
+
+    @property
+    def mask(self):
+        self._mask = np.ones(self.features[0].shape, dtype=bool)
+        for m, j in zip(self._mask, self.case_lens):
+            m[1:j] = False
+        return self._mask

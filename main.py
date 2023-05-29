@@ -34,8 +34,8 @@ def main(dataset,batch_size=64,n_epochs=20 ,lr=0.0002 ,b1=0.5 ,b2=0.999 ,seed=No
     Xs=[]
     for i, dim in enumerate(dataset.attribute_dims):
         Xs.append( torch.LongTensor(dataset.features[i]))
-    case_lens=torch.LongTensor(dataset.case_lens)
-    tensorDataset = Data.TensorDataset(*Xs, case_lens)
+    mask=torch.BoolTensor(dataset.mask)
+    tensorDataset = Data.TensorDataset(*Xs,  mask)
     dataloader = DataLoader(tensorDataset, batch_size=batch_size,shuffle=True,num_workers=8,pin_memory=True, drop_last=True)
 
     gru_ae = train(dataloader,dataset.attribute_dims,n_epochs ,lr ,b1 ,b2 ,seed ,enc_hidden_dim  , encoder_num_layers ,decoder_num_layers, dec_hidden_dim )
@@ -45,7 +45,7 @@ def main(dataset,batch_size=64,n_epochs=20 ,lr=0.0002 ,b1=0.5 ,b2=0.999 ,seed=No
                             shuffle=False,num_workers=8,pin_memory=True)
     #
     attr_Shape=(dataset.num_cases,dataset.max_len,dataset.num_attributes)
-    trace_level_abnormal_scores,event_level_abnormal_scores,attr_level_abnormal_scores = detect(gru_ae, detect_dataloader, dataset.attribute_dims,attr_Shape=attr_Shape)
+    trace_level_abnormal_scores,event_level_abnormal_scores,attr_level_abnormal_scores = detect(gru_ae, detect_dataloader, dataset.attribute_dims)
 
     return  trace_level_abnormal_scores,event_level_abnormal_scores,attr_level_abnormal_scores
 
