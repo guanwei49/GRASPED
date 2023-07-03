@@ -35,7 +35,7 @@ def detect(gru_ae, dataloader, attribute_dims):
 
             final_res.append(torch.stack(this_res,2))
 
-        attr_level_abnormal_scores = np.array(torch.concatenate(final_res, 0).detach().cpu())
+        attr_level_abnormal_scores = np.array(torch.cat(final_res, 0).detach().cpu())
         trace_level_abnormal_scores = attr_level_abnormal_scores.max((1, 2))
         event_level_abnormal_scores = attr_level_abnormal_scores.max((2))
         return  trace_level_abnormal_scores,event_level_abnormal_scores,attr_level_abnormal_scores
