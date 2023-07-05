@@ -18,7 +18,7 @@ def detect(gru_ae, dataloader, attribute_dims):
             for k,tempX in enumerate(Xs):
                 Xs[k] = tempX.to(device)
 
-            fake_X = gru_ae(Xs)
+            fake_X = gru_ae(Xs,mask)
 
             for attr_index in range(len(attribute_dims)):
                 fake_X[attr_index]=torch.softmax(fake_X[attr_index],dim=2)

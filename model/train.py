@@ -26,11 +26,13 @@ def train(dataloader,attribute_dims,n_epochs ,lr ,b1 ,b2 ,seed,enc_hidden_dim , 
         train_loss = 0.0
         train_num = 0
         for i, Xs in enumerate(tqdm(dataloader)):
+            mask=Xs[-1]
+            mask=mask.to(device)
             Xs = Xs[:-1]
             for k ,X in enumerate(Xs):
                 Xs[k]=X.to(device)
 
-            fake_X = gru_ae(Xs)
+            fake_X = gru_ae(Xs,mask)
 
             optimizer.zero_grad()
 
@@ -39,9 +41,15 @@ def train(dataloader,attribute_dims,n_epochs ,lr ,b1 ,b2 ,seed,enc_hidden_dim , 
                 #--------------
                 # 除了每一个属性的起始字符之外,其他重建误差
                 #---------------
-                pred=fake_X[ij][:,1:,:].flatten(0,-2)
-                true=Xs[ij][:,1:].flatten()
-                loss+=loss_func(pred,true)
+                pred = torch.softmax(fake_X[ij][:, 1:, :], dim=2).flatten(0, -2)
+                true = Xs[ij][:, 1:].flatten()
+
+                corr_pred = pred.gather(1, true.view(-1, 1)).flatten().to(device).reshape(-1,
+                                                                                               fake_X[0].shape[1] - 1)
+
+                cross_entropys = -torch.log(corr_pred)
+                loss += cross_entropys.masked_select((~mask[:, 1:])).mean()
+
 
             train_loss += loss.item() * Xs[0].shape[0]
             train_num +=Xs[0].shape[0]
