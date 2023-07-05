@@ -180,10 +180,8 @@ class GRU_AE(nn.Module):  #PAV版本
             trg_len = X.shape[0]
             output_dim = int(dim)+1
             # 存储所有时刻的输出
-            if X.is_cuda:
-                outputs.append(torch.zeros(trg_len, batch_size, output_dim).cuda())  # 存储decoder的所有输出
-            else:
-                outputs.append(torch.zeros(trg_len, batch_size, output_dim))  # 存储decoder的所有输出
+            device=X.device
+            outputs.append(torch.zeros(trg_len, batch_size, output_dim).to(device))
             enc_output_, s_ = self.encoders[i](X)
 
             if enc_output is None:
