@@ -13,7 +13,6 @@ def train(dataloader,attribute_dims,n_epochs ,lr ,b1 ,b2 ,seed,enc_hidden_dim , 
 
     gru_ae = GRU_AE(attribute_dims, enc_hidden_dim, encoder_num_layers,decoder_num_layers ,dec_hidden_dim)
 
-    loss_func = nn.CrossEntropyLoss()
 
     gru_ae.to(device)
 
