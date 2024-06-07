@@ -1,1 +1,2 @@
 # GRASPED: A GRU-AE Network based Multi-perspective Business Process Anomaly Detection Model
+More details about the dataset simulation and metric computation can be found at [https://github.com/guanwei49/BPAD](https://github.com/guanwei49/BPAD)
